@@ -14,7 +14,10 @@ tricky than what you think. We encourage you to checkout off-the-shelf Authentic
 
 Each step in this sample has it's own branch.
 
-- Step 1: 
+- Step 1: Create a basic markdown viewer app
+- Step 2: Create an authentication actor
+- Step 3: Create auth endpoints & use it in the client
+- Step 4: Protect existing endpoints
 
 ## How to run it
 

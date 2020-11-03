@@ -7,17 +7,15 @@ namespace Azure.Demos.MagicLinksAuth.Functions
 {
     public interface IOneTimeAuthenticationActor
     {
-        void SetActor(string email, string name, string jwtToken, string redirectUri);
-        bool UseToken();
+        void SetRequestId(string requestId);
+        void SetEmail(string email);
         void Delete();
+        void SendInvite();
     }
 
     [JsonObject(MemberSerialization.OptIn)]
     public class OneTimeAuthenticationActor : IOneTimeAuthenticationActor
     {
-        [JsonProperty("used")]
-        public bool IsTokenUsed { get; set; }
-
         [JsonProperty("email")]
         public string UserEmail { get; set; }
 
@@ -30,26 +28,30 @@ namespace Azure.Demos.MagicLinksAuth.Functions
         [JsonProperty("redirect")]
         public string RedirectUri { get; set; }
 
-        public void SetActor(string email, string name, string jwtToken, string redirectUri)
+        [JsonProperty("requestId")]
+        public string RequestId { get; set; }
+
+        public void SetRequestId(string requestId)
         {
-            UserEmail = email;
-            UserName = name;
-            JwtToken = jwtToken;
-            RedirectUri = redirectUri;
+            RequestId = requestId;
         }
 
-        public bool UseToken()
+        public void SetEmail(string email)
         {
-            if (string.IsNullOrEmpty(JwtToken) || IsTokenUsed)
-                return false;
-
-            IsTokenUsed = true;
-            return IsTokenUsed;
+            RequestId = Entity.Current.EntityKey;
+            UserEmail = email;
+            JwtToken = "jwtToken";
+            RedirectUri = $"https://localhost:44355/auth/callback/{JwtToken}";
         }
 
         public void Delete()
         {
             Entity.Current.DeleteState();
+        }
+
+        public void SendInvite()
+        {
+            
         }
 
         [FunctionName(nameof(OneTimeAuthenticationActor))]
