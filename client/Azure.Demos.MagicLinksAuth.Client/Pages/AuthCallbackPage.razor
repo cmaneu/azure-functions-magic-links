@@ -1,0 +1,21 @@
+﻿@page "/.auth/callback/{AuthRequestId}" 
+@using System.Net.Http.Headers
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+@code {
+
+    [Parameter]
+    public string AuthRequestId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync($".auth/callback/{AuthRequestId}");
+        if (response.IsSuccessStatusCode)
+        {
+            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthRequestId);
+            NavManager.NavigateTo("/");
+        }
+    }
+
+}
