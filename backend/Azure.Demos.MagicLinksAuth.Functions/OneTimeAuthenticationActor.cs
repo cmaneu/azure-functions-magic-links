@@ -1,6 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.DurableTask;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace Azure.Demos.MagicLinksAuth.Functions
@@ -16,6 +22,8 @@ namespace Azure.Demos.MagicLinksAuth.Functions
     [JsonObject(MemberSerialization.OptIn)]
     public class OneTimeAuthenticationActor : IOneTimeAuthenticationActor
     {
+        private IOptions<ApplicationSettings> _applicationSettingsOptions;
+
         [JsonProperty("email")]
         public string UserEmail { get; set; }
 
@@ -31,6 +39,12 @@ namespace Azure.Demos.MagicLinksAuth.Functions
         [JsonProperty("requestId")]
         public string RequestId { get; set; }
 
+
+        public OneTimeAuthenticationActor(IOptions<ApplicationSettings> applicationSettingsOptions)
+        {
+            _applicationSettingsOptions = applicationSettingsOptions;
+        }
+
         public void SetRequestId(string requestId)
         {
             RequestId = requestId;
@@ -40,8 +54,26 @@ namespace Azure.Demos.MagicLinksAuth.Functions
         {
             RequestId = Entity.Current.EntityKey;
             UserEmail = email;
-            JwtToken = "jwtToken";
-            RedirectUri = $"https://localhost:44355/auth/callback/{JwtToken}";
+            JwtToken = GenerateJwtToken(email);
+            RedirectUri = $"https://localhost:44355/.auth/callback/{JwtToken}";
+        }
+
+        private string GenerateJwtToken(string email)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_applicationSettingsOptions.Value.JwtSecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.GivenName, "User")
+                }),
+                Expires = DateTime.UtcNow.AddDays(20),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public void Delete()
