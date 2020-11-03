@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{078A04D1-A383-4FF8-9C4E-EBEB5108DBF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{9C34232A-278B-4FD2-9C3B-5EEBDFBEA9DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azure.Demos.MagicLinksAuth.Functions", "backend\Azure.Demos.MagicLinksAuth.Functions\Azure.Demos.MagicLinksAuth.Functions.csproj", "{80073025-C042-49F6-B778-95ED54893D4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azure.Demos.MagicLinksAuth.Client", "client\Azure.Demos.MagicLinksAuth.Client\Azure.Demos.MagicLinksAuth.Client.csproj", "{6ADB469C-10B8-4F84-B548-D6369AB3258F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80073025-C042-49F6-B778-95ED54893D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80073025-C042-49F6-B778-95ED54893D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80073025-C042-49F6-B778-95ED54893D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80073025-C042-49F6-B778-95ED54893D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADB469C-10B8-4F84-B548-D6369AB3258F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADB469C-10B8-4F84-B548-D6369AB3258F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADB469C-10B8-4F84-B548-D6369AB3258F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADB469C-10B8-4F84-B548-D6369AB3258F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80073025-C042-49F6-B778-95ED54893D4A} = {9C34232A-278B-4FD2-9C3B-5EEBDFBEA9DF}
+		{6ADB469C-10B8-4F84-B548-D6369AB3258F} = {078A04D1-A383-4FF8-9C4E-EBEB5108DBF8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D94B62ED-448F-4151-9FDD-C673E062C13B}
+	EndGlobalSection
+EndGlobal
