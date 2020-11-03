@@ -1,0 +1,32 @@
+﻿@using Markdig
+@inject HttpClient Http
+<h3>@ChapterName</h3>
+
+@((MarkupString)ChapterMarkdown)
+
+@code {
+
+
+    [Parameter]
+    public string CourseSlug { get; set; }
+
+    [Parameter]
+    public string ChapterSlug { get; set; }
+
+    public string ChapterName { get; set; }
+
+    public string ChapterMarkdown { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        if (string.IsNullOrEmpty(CourseSlug) || string.IsNullOrEmpty(ChapterSlug))
+            return;
+
+        ChapterName = CourseUtilities.FormatChapterName(ChapterSlug);
+        var markdownContent = await Http.GetStringAsync($"content/{CourseSlug}/{ChapterSlug}");
+        ChapterMarkdown = Markdown.ToHtml(markdownContent);
+    }
+
+
+}

@@ -1,0 +1,38 @@
+﻿@page "/course/{courseSlug}"
+@inject HttpClient Http
+@using Azure.Demos.MagicLinksAuth.Client.Components
+
+<h2>@CourseName</h2>
+
+@if (Chapters != null)
+{
+    <h3>Chapters</h3>
+    <ul>
+        @foreach(var chap in Chapters)
+    {
+        <li id="@chap" @onclick="() => CurrentChapter = chap">@CourseUtilities.FormatChapterName(chap)</li>
+    }
+    </ul>
+
+    <Azure.Demos.MagicLinksAuth.Client.Components.ChapterViewer CourseSlug="@CourseSlug" ChapterSlug="@CurrentChapter" />
+}
+
+
+@code {
+
+    [Parameter]
+    public string CourseSlug { get; set; }
+
+    public string CourseName { get; set; }
+
+    public string CurrentChapter { get; set; }
+
+    public List<string> Chapters { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Chapters = await Http.GetFromJsonAsync<List<string>>($"content/{CourseSlug}");
+        CurrentChapter = Chapters.FirstOrDefault();
+    }
+}

@@ -21,6 +21,13 @@ Each step in this sample has it's own branch.
 
 ## How to develop
 
+### Update local.settings.json to add CORS support
+
+```json
+  "Host": {
+    "CORS": "*"
+  }
+```
 
 ## License
 
