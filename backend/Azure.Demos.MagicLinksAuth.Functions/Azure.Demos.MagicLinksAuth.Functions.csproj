@@ -4,7 +4,21 @@
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\courses\discover-scuba-diving\2-your-equipment.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\courses\discover-scuba-diving\2-your-equipment.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\courses\discover-scuba-diving\1-welcome.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\courses\discover-scuba-diving\1-welcome.md" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
