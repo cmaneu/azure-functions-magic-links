@@ -1,5 +1,8 @@
 ﻿using Azure.Demos.MagicLinksAuth.Functions;
+using Azure.Demos.MagicLinksAuth.Functions.Infrastructure;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +18,8 @@ namespace Azure.Demos.MagicLinksAuth.Functions
                 .Services
                 .AddOptions<ApplicationSettings>()
                 .Configure<IConfiguration>((settings, configuration) => { configuration.Bind(settings); });
+            // TODO: Move audience and issuer to config
+            builder.Services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
         }
     }
 }

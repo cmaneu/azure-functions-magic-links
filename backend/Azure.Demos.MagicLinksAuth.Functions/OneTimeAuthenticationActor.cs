@@ -70,7 +70,9 @@ namespace Azure.Demos.MagicLinksAuth.Functions
                     new Claim(ClaimTypes.GivenName, "User")
                 }),
                 Expires = DateTime.UtcNow.AddDays(20),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Audience = "https://courses.scubabous.fr",
+                Issuer = "https://courses.scubabous.fr"
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);

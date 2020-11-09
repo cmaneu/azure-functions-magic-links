@@ -67,10 +67,12 @@ namespace Azure.Demos.MagicLinksAuth.Functions
             var cookieOptions = new CookieOptions();
             cookieOptions.Expires = DateTime.Now.AddDays(20);
             cookieOptions.HttpOnly = true;
-            cookieOptions.Secure = false;
+            cookieOptions.Secure = true;
+            cookieOptions.SameSite = SameSiteMode.None;
+
             req.HttpContext.Response.Cookies.Append("auth.token", jwtToken, cookieOptions);
             
-            return new OkObjectResult(null);
+            return new OkObjectResult(jwtToken);
 
         }
     }
