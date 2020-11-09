@@ -1,0 +1,63 @@
+﻿@page "/.auth/magicemail"
+@inject HttpClient HttpClient
+
+<h2>Sign in</h2>
+
+@if (IsCompleted)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Check your email</h5>
+            <p class="card-text">We've just emailed you a magic code.</p>
+            @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+            {
+                <div class="alert alert-warning" role="alert">
+                    <p><b>Unable to send magic link.</b></p>
+                    <p>@ErrorMessage</p>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(OneTimeCode))
+            {
+                <div class="alert alert-secondary" role="alert">
+                    <p><b>Debug - One Time Code</b></p>
+                    <pre><code>@OneTimeCode</code></pre>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Login with your email</h5>
+        <p class="card-text">We’ll email you a magic code for a password-free sign in. </p>
+        <p><input type="email" class="form-control" id="email" @bind="Email" placeholder="name@example.com"></p>
+        <a class="btn btn-primary" @onclick="OnFormClick">Send link</a>
+    </div>
+</div>
+}
+
+@code {
+
+    public bool IsCompleted { get; set; }
+    public string Email { get; set; }
+    public string OneTimeCode { get; set; }
+    public string ErrorMessage { get; set; }
+
+    private async Task OnFormClick()
+    {
+        // Execute request
+        var result = await HttpClient.PostAsync(".auth/login", new StringContent(Email));
+#if DEBUG
+        OneTimeCode = await result.Content.ReadAsStringAsync();
+#endif
+        IsCompleted = true;
+
+        if (!result.IsSuccessStatusCode)
+        {
+            ErrorMessage = $"{result.StatusCode}: {result.ReasonPhrase}";
+        }
+    }
+}

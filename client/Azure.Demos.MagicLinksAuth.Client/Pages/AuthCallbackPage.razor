@@ -13,7 +13,8 @@
         var response = await Http.GetAsync($".auth/callback/{AuthRequestId}");
         if (response.IsSuccessStatusCode)
         {
-            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AuthRequestId);
+
+            Http.DefaultRequestHeaders.Add("auth.token", await response.Content.ReadAsStringAsync());
             NavManager.NavigateTo("/");
         }
     }

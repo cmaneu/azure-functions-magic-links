@@ -1,5 +1,6 @@
 ﻿@page "/course/{courseSlug}"
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 @using Azure.Demos.MagicLinksAuth.Client.Components
 
 <h2>@CourseName</h2>
@@ -14,7 +15,11 @@
     }
     </ul>
 
-    <Azure.Demos.MagicLinksAuth.Client.Components.ChapterViewer CourseSlug="@CourseSlug" ChapterSlug="@CurrentChapter" />
+    <Azure.Demos.MagicLinksAuth.Client.Components.ChapterViewer 
+        CourseSlug="@CourseSlug" 
+        ChapterSlug="@CurrentChapter" 
+        OnFetchCapterFailed=@FetchCapterFailed
+        />
 }
 
 
@@ -34,5 +39,10 @@
     {
         Chapters = await Http.GetFromJsonAsync<List<string>>($"content/{CourseSlug}");
         CurrentChapter = Chapters.FirstOrDefault();
+    }
+
+    private void FetchCapterFailed(ChapterViewer.ChapterFetchFailedEventCallback failedEvent)
+    {
+        NavigationManager.NavigateTo("/.auth/magicemail");
     }
 }

@@ -17,6 +17,9 @@
 
     public string ChapterMarkdown { get; set; }
 
+    [Parameter]
+    public EventCallback<ChapterFetchFailedEventCallback> OnFetchCapterFailed { get; set; }
+
     protected override async Task OnParametersSetAsync()
     {
 
@@ -24,9 +27,23 @@
             return;
 
         ChapterName = CourseUtilities.FormatChapterName(ChapterSlug);
-        var markdownContent = await Http.GetStringAsync($"content/{CourseSlug}/{ChapterSlug}");
-        ChapterMarkdown = Markdown.ToHtml(markdownContent);
+
+        try
+        {
+            var markdownContent = await Http.GetStringAsync($"content/{CourseSlug}/{ChapterSlug}");
+            ChapterMarkdown = Markdown.ToHtml(markdownContent);
+        }
+        catch (Exception e)
+        {
+            await OnFetchCapterFailed.InvokeAsync(new ChapterFetchFailedEventCallback() {Exception = e});
+        }
+        
     }
 
+
+    public class ChapterFetchFailedEventCallback
+    {
+        public Exception Exception { get; set; }
+    }
 
 }
